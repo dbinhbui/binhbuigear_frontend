@@ -94,7 +94,7 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
                     </Col>
                 )}
 
-                <Col span={6} style={{ display: 'flex', gap: '54px', alignItems: 'center' }}>
+                <Col span={10} style={{ display: 'flex', gap: '54px', alignItems: 'center' }}>
                     <Loading isLoading={loading}>
                         <WrapperHeaderAccount>
                             {userAvatar ? (
@@ -135,12 +135,12 @@ const HeaderComponent = ({ isHiddenSearch = false, isHiddenCart = false }) => {
                     )}
 
                 </Col>
-                <WrapperHeaderBuildPC>
+                {/* <WrapperHeaderBuildPC>
                     <div onClick={() => navigate('/buildpc')} style={{ cursor: 'pointer' }}>
                         <ToolOutlined style={{ fontSize: '30px', color: '#efd8ff' }} />
                         <WrapperTextHeaderSmall>Xây dựng cấu hình</WrapperTextHeaderSmall>
                     </div>
-                </WrapperHeaderBuildPC>
+                </WrapperHeaderBuildPC> */}
             </WrapperHeader>
         </div>
     )
