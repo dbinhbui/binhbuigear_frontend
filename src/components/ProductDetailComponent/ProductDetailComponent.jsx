@@ -11,17 +11,19 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { addOrderProduct, resetOrder } from "../../redux/slides/orderSlide";
+import { addbuildpcProduct, resetbuildpc } from "../../redux/slides/buildPcSlide";
 import { convertPrice, initFacebookSDK } from "../../untils";
 import { useEffect } from "react";
 import * as message from '../Message/Message'
 import LikeButtonComponent from "../LikeButtonComponent/LikeButtonComponent";
 import CommentComponent from "../CommentComponent/CommentComponent";
 import { useMemo } from "react";
-import { addbuildpcProduct } from "../../redux/slides/buildPcSlide";
+
 const ProductDetailComponent = ({ idProduct }) => {
     const [numProduct, setNumProduct] = useState(1)
     const user = useSelector((state) => state.user)
     const order = useSelector((state) => state.order)
+    const buildpc = useSelector((state) => state.buildpc)
     const [errorLimitOrder, setErrorLimitOrder] = useState(false)
     const navigate = useNavigate()
     const location = useLocation()
@@ -61,6 +63,7 @@ const ProductDetailComponent = ({ idProduct }) => {
         }
     }, [order.isSuccessOrder])
 
+
     const handleChangeCount = (type, limited) => {
         if (type === 'increase') {
             if (!limited) {
@@ -98,24 +101,27 @@ const ProductDetailComponent = ({ idProduct }) => {
         }
     }
     const handleAddBuildPC = () => {
-        dispatch(addbuildpcProduct({
-            buildpcItem: {
-                name: productDetails?.name,
-                amount: numProduct,
-                image: productDetails?.image,
-                price: productDetails?.price,
-                product: productDetails?._id,
-                discount: productDetails?.discount,
-                countInstock: productDetails?.countInStock
-            }
-        }))
+        const buildpcRedux = buildpc?.buildpcItems?.find((item) => item.product === productDetails?._id)
+        if ((buildpcRedux?.amount + numProduct) <= buildpcRedux?.countInstock || (!buildpcRedux && productDetails?.countInStock > 0)) {
+            dispatch(addbuildpcProduct({
+                buildpcItem: {
+                    name: productDetails?.name,
+                    amount: numProduct,
+                    image: productDetails?.image,
+                    price: productDetails?.price,
+                    product: productDetails?._id,
+                    discount: productDetails?.discount,
+                    countInstock: productDetails?.countInStock
+                }
+            }))
+        }
     }
     return (
         <Loading isLoading={isLoading}>
             <Row style={{ padding: '16px', background: '#fff', borderRadius: '4px' }}>
                 <Col span={10} style={{ borderRight: '1px solid #e5e5e5', paddingRight: '8px' }}>
                     <Image src={productDetails?.image} alt="image product" />
-                    <Row style={{ paddingTop: '10px', }}>
+                    {/* <Row style={{ paddingTop: '10px', }}>
                         <WrapperStyleColImage span={4}>
                             <WrapperStyleImageSmall src={imagePrdsmall} alt="image small" />
                         </WrapperStyleColImage>
@@ -128,7 +134,7 @@ const ProductDetailComponent = ({ idProduct }) => {
                         <WrapperStyleColImage span={4}>
                             <WrapperStyleImageSmall src={imagePrdsmall} alt="image small" />
                         </WrapperStyleColImage>
-                    </Row>
+                    </Row> */}
                 </Col>
                 <Col span={14} style={{ paddingLeft: '10px' }}>
                     <WrapperStyleNameProduct>
@@ -177,7 +183,7 @@ const ProductDetailComponent = ({ idProduct }) => {
                             ></ButtonComponent>
                             {errorLimitOrder && <div style={{ color: 'red' }}>Hết hàng</div>}
                         </div>
-                        <ButtonComponent
+                        {/* <ButtonComponent
                             size={40}
                             styleButton={{
                                 background: '#fff', borderRadius: "10px",
@@ -188,7 +194,7 @@ const ProductDetailComponent = ({ idProduct }) => {
                             onClick={handleAddBuildPC}
                             textButton={'Thêm vào danh sách'}
                             styleTextButton={{ color: 'rgb(13, 92, 182)', fontSize: '15px' }}
-                        ></ButtonComponent>
+                        ></ButtonComponent> */}
                     </div>
                 </Col>
                 <CommentComponent
